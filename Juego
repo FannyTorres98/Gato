@@ -1,0 +1,105 @@
+public class Gato
+{
+    // instance variables - replace the example below with your own
+    String m[][];
+    
+    //Se hace un constructor donde se crea la matriz y se llena de valores
+    public Gato(){
+        m= new String[3][3];
+        for(int f=0; f<m.length;f++){
+            for(int c=0;c<m[f].length;c++){
+                m[f][c]="";
+            }
+        }
+    }
+    
+    //Se crea un metodo que le permite al usuario hacer la accion para jugar
+    //Como es un gato, necesitas saber cual es la marca que el jugador pondra y la posicion en la que la pondra
+    //En matrices, no importa si la matriz sea de string char double, los valores de las posiciones SIEMPRE son
+    //numeros enteros
+    //Ej;: Matriz de string, tiene la posicion (1,2)
+    //Recibe por parametros la marca, la fila y la columna.
+    //Tambien se puede poner dentro del metodo pidiendolo por JOptionPane
+    public void juegue(String marca, int f, int c){
+        //Para asignarle valores a una matriz, se debe recorrer
+        //Para buscar un valor en una matriz, se debe recorrer
+        for(int fil=0; fil<m.length;fil++){
+            for(int col=0;col<m[fil].length;col++){
+                //Se verifica que si se llego a la posicion donde se pondra la marca
+                if((fil==f) && (col==c)){
+                    m[fil][col]=marca;
+                }
+            }
+        }
+    }
+    
+    //Este metodo siempre es igual paa imprimir todas las matrices
+    public void muestre(){
+        for(int fil=0; fil<m.length;fil++){
+            for(int col=0;col<m[fil].length;col++){
+                System.out.print(m[fil][col]+" ");
+            }
+            System.out.println();
+        }
+    }
+    
+    //Este metodo verifica si ya se gano el juego
+    //Para ganar en gato, hay 3 casos. Se debe analizar cada caso
+    //se hace para cualquier juego
+    public boolean winGame(){
+        boolean gano=false;
+        //Caso de que la victoria haya sido de manera horizontal
+        //Se analiza del valor del medio de cada fila.
+        //Ej:        |X|     se evalua a la izquierda y a la derecha de ese campo, si son iguales, se cambia
+        for(int fil=0; fil<m.length;fil++){
+            for(int col=1;col<m[fil].length-1;col++){
+                if((m[fil][col]==m[fil][col-1]) && (m[fil][col]==m[fil][col+1])){
+                    gano=true;
+                }
+            }
+        }
+        
+        //Caso de que la victoria es de manera vertical
+        //Cuando se quiere evaluar una matriz de manera vertical, se debe invertir la posicion de m[f}[c] a m[c][f]
+        //La razon de esto es como si le dieras un giro de 90 grados a la grafica x y
+        //En la posicion de la x quedaria la y y en la posicion de la y quedaria la x
+        //Es el mismo caso de la anterior, se agarra el valor del medio y se evalua lo que esta antes y despues
+        //Los for se crean asi porque se quiere recorrer al rededor de la posicion media. La columna empieza en 1 para siempre referirnos a la posicion del medio.
+        for(int fil=0; fil<m.length;fil++){
+            for(int col=1;col<m[fil].length-1;col++){
+                if((m[col][fil]==m[col-1][fil]) && (m[col][fil]==m[col+1][fil])){
+                    gano=true;
+                }
+            }
+        }
+        
+        //Aca se analiza la digonal. Como es una matriz cuadrada de 3x3, podemos preguntar de una vez con los numeors
+        //Si la posicion del medio es igual a la inicial de la digaonal, y a la final de la diagonal.
+        if(m[1][1]==m[0][0] && m[1][1]==m[2][2]){
+            gano=true;
+        }
+        return gano;
+    }
+
+    public static void main(String args[]){
+        Gato g=new Gato();
+        boolean gano=false;
+        int cont=0;
+        while((gano==false)||(cont<=9)){
+            cont++;
+            String marca1=JOptionPane.showInputDialog("Elija una marca");
+            String marca2=JOptionPane.showInputDialog("Elija una marca diferente a la del otro jugador");
+            int f1=Integer.parseInt(JOptionPane.showInputDialog("Digite la fila"));
+            int c1=Integer.parseInt(JOptionPane.showInputDialog("Digite la columna"));
+            g.juegue(marca1, f1, c1);
+            
+            cont++;
+            int f2=Integer.parseInt(JOptionPane.showInputDialog("Digite la fila"));
+            int c2=Integer.parseInt(JOptionPane.showInputDialog("Digite la columna"));
+            g.juegue(marca2, f2, c2);
+            g.muestre();
+            
+            gano=g.winGame();
+        }
+    }
+}
